@@ -23,7 +23,6 @@ _deps/
 *.dll
 *.exe
 euchre
-tests
 
 # IDE - CLion / IntelliJ
 .idea/
