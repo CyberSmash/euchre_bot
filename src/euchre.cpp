@@ -20,7 +20,7 @@ void run() {
     std::cout << "Card 3: " << c3 << std::endl;
     std::cout << "Eff Suit: " << t.eff_suit[Suit::D][c3] << std::endl;
  
-    std::cout << "C1 Power (H) " << (uint32_t)t.power[Suit::S][Suit::C][c] << std::endl;
+    std::cout << "C1 Power (H) " << static_cast<uint32_t>(t.power[Suit::S][Suit::C][c]) << std::endl;
     
 
 

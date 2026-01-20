@@ -9,16 +9,31 @@ file(GLOB_RECURSE EUCHRE_SRC CONFIGURE_DEPENDS
 
 list(REMOVE_ITEM EUCHRE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 
+option(ENABLE_SANITIZERS "Enable sanitizers" ON)
+
+add_library(sanitizers INTERFACE)
+
+if (ENABLE_SANITIZERS AND NOT MSVC)
+  target_compile_options(sanitizers INTERFACE
+    -fsanitize=address,undefined
+    -fno-omit-frame-pointer
+    -g
+  )
+  target_link_options(sanitizers INTERFACE
+    -fsanitize=address,undefined
+  )
+endif()
 
 # Euchre Library
 add_library(euchre_lib)
 target_sources(euchre_lib PRIVATE ${EUCHRE_SRC})
 target_include_directories(euchre_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(euchre_lib PRIVATE sanitizers)
 
 # Euchre Main executable
 add_executable(euchre src/main.cpp)
 #target_include_directories(euchre PRIVATE include)
-target_link_libraries(euchre PRIVATE euchre_lib)
+target_link_libraries(euchre PRIVATE euchre_lib sanitizers)
 
 # Catch2 
 include(FetchContent)
@@ -42,18 +57,6 @@ if (BUILD_TESTING)
   # Nice: auto-registers each TEST_CASE with ctest
   include(Catch)
   catch_discover_tests(tests)
-endif()
-
-option(ENABLE_SANITIZERS "Enable sanitizers" ON)
-
-if (ENABLE_SANITIZERS AND NOT MSVC)
-  target_compile_options(euchre_lib PRIVATE
-    -fsanitize=address,undefined
-    -fno-omit-frame-pointer
-  )
-  target_link_options(euchre_lib PRIVATE
-    -fsanitize=address,undefined
-  )
 endif()
 
 function(enable_warnings_as_errors target)
@@ -101,4 +104,6 @@ endfunction()
 
 enable_warnings(euchre_lib)
 enable_warnings(euchre)
-enable_warnings(tests)
+if (BUILD_TESTING)
+  enable_warnings(tests)
+endif()

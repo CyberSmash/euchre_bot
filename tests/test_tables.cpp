@@ -29,7 +29,7 @@ TEST_CASE("Card Power", "[tables]") {
     uint8_t c1_power = t.power[trump][led][c1];
     uint8_t c2_power = t.power[trump][led][c2];
 
-    REQUIRE((uint32_t)c1_power > (uint32_t)c2_power);
+    REQUIRE(c1_power > c2_power);
     
     // Check that the right bower is being respected in the simple case.
     c1 = make_card(Suit::S, Rank::R9);

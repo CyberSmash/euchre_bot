@@ -27,11 +27,15 @@ enum Rank : uint8_t {
 
 
 struct Card {
-    uint8_t v;
+    uint8_t v = euchre::constants::invalid_card;
 
+    constexpr Card() = default;
     constexpr Card(uint8_t c) : v(c) {};
     constexpr Card(uint32_t c) : v(static_cast<uint8_t>(c)) {
         assert(c < euchre::constants::num_cards);    
+    }
+    constexpr Card(int32_t c) : v(static_cast<uint8_t>(c)) {
+        assert(c < euchre::constants::num_cards);
     }
     constexpr Card(Suit s, Rank r) {
         v = s*6 + r;
@@ -41,6 +45,8 @@ struct Card {
     constexpr operator uint8_t() const {
         return v;
     }
+
+    ~Card() = default;
 
 };
 

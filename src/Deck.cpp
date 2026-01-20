@@ -2,7 +2,7 @@
 #include "Card.hpp"
 #include <bit>
 
-uint32_t draw_card(uint32_t& remaining_cards, std::mt19937& rng) {
+Card draw_card(uint32_t& remaining_cards, std::mt19937& rng) {
     // Get the number of cards left in the deck.
     int cards_left = std::popcount(remaining_cards);
     std::uniform_int_distribution<int> dist(0, cards_left - 1);

@@ -91,8 +91,8 @@ namespace euchre::tables {
             for (uint8_t led = 0; led < 4; led++) {
                 Suit led_suit = Suit(led);
 
-                for(Card c = 0; c < 24; c++) {
-
+                for(uint8_t i = 0; i < 24; i++) {
+                    Card c{i};
                     Suit eff_card_suit = t.eff_suit[trump][c];
                     uint8_t power = 0;
 

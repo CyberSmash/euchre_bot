@@ -8,16 +8,16 @@ TEST_CASE("Deal Cards", "[deck]") {
     GameState gs;
     std::mt19937 eng(12345);
     std::array<Card, 10> a;
-    std::array<Card, 10> b;
-
-    for (int i = 0; i < 10; i++) {
+    gs.deck = euchre::constants::deck_reset;
+    for (std::size_t i = 0; i < 10; i++) {
         Card c = draw_card(gs.deck, eng);
         a[i] = c;
+        REQUIRE_FALSE(a[i] == euchre::constants::invalid_card);
     }
 
     gs.deck = euchre::constants::deck_reset;
     eng.seed(12345);
-    for (int i = 0; i < 10; i++) {
+    for (std::size_t i = 0; i < 10; i++) {
         Card c = draw_card(gs.deck, eng); 
         REQUIRE(c == a[i]);
     }
@@ -27,7 +27,7 @@ TEST_CASE("Deal Cards", "[deck]") {
     int matches = 0;
     gs.deck = euchre::constants::deck_reset;
 
-    for (int i = 0; i < 10; i++) {
+    for (size_t i = 0; i < 10; i++) {
         Card c = draw_card(gs.deck, eng);
         if (c == a[i]) {
             matches++;
