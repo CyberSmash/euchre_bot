@@ -1,0 +1,54 @@
+# Build directories
+build/
+cmake-build-*/
+out/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+_deps/
+.cache/
+
+# Compiled objects and binaries
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+euchre
+tests
+
+# IDE - CLion / IntelliJ
+.idea/
+
+# IDE - Visual Studio
+.vs/
+*.vcxproj*
+*.sln
+
+# IDE - VS Code
+.vscode/
+
+# IDE - Xcode
+*.xcodeproj/
+*.xcworkspace/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Linux
+*~
+
+# Catch2 fetched content
+_deps/
