@@ -4,6 +4,7 @@
 #include "Defns.hpp"
 #include <random>
 #include <iostream>
+#include "Hand.hpp"
 
 enum class Phase : uint8_t { 
     Deal,
@@ -15,17 +16,23 @@ enum class Phase : uint8_t {
 
 };
 
-
 struct HandState {
     Phase phase;
-    unsigned int hands[euchre::constants::num_players];
+    Hand hands[euchre::constants::num_players] {};
 
-    inline constexpr void give_card(Card c, uint8_t player) {
-        hands[player] |= (1 << c);
+    void give_card_to(Card c, int player) {
+        assert(player < euchre::constants::num_players);
+        hands[player].give_card(c);
     }
 
-    inline constexpr void show_hand(uint8_t player) {
-        
+    std::vector<Card> decode_hand(uint32_t hand) {
+        std::vector<Card> cards(5);
+        while (hand) {
+            uint32_t bit = hand & -hand;
+            int idx = std::countr_zero<uint32_t>(bit);
+            cards.push_back(Card {idx});
+        }
+        return cards;
     }
 
 };

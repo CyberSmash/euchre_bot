@@ -37,3 +37,22 @@ TEST_CASE("Deal Cards", "[deck]") {
     REQUIRE(matches < 5);
 
 }
+
+TEST_CASE("Deal No Duplicates", "[deck]") {
+    GameState gs;
+    std::mt19937 eng(12345);
+
+    uint32_t hand = 0;
+
+    for (int i = 0; i < euchre::constants::num_cards; i++) {
+        Card c = draw_card(gs.deck, eng);
+        gs.hand_state.give_card_to(c, i % euchre::constants::num_players);
+    }
+    uint32_t sum = 0;
+    for (int i = 0; i < 4; i++) {
+        sum += gs.hand_state.hands[i].value();
+    }
+
+    uint32_t match = gs.hand_state.hands[0].value() | gs.hand_state.hands[1].value() | gs.hand_state.hands[2].value() | gs.hand_state.hands[3].value();
+    REQUIRE(match == sum);
+}

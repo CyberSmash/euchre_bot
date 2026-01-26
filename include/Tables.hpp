@@ -4,12 +4,14 @@
 
 namespace euchre::tables {
     using SuitTable = std::array<Suit, euchre::constants::num_cards>;
+    using SuitMaskTable = std::array<std::array<uint32_t, 4>, 4>;
     using EffSuitTable = std::array<std::array<Suit, 24>, 4>;
     using PowerTable = std::array<std::array<std::array<uint8_t, 24>, 4>, 4>;
-
+    
     struct Tables {
-        SuitTable suit_table {};
-        EffSuitTable eff_suit {};
+        SuitTable suit_tbl {};
+        SuitMaskTable suit_mask_tbl {};
+        EffSuitTable eff_suit_tbl {};
         PowerTable power {};
         uint32_t deck;
     };
@@ -93,7 +95,7 @@ namespace euchre::tables {
 
                 for(uint8_t i = 0; i < 24; i++) {
                     Card c{i};
-                    Suit eff_card_suit = t.eff_suit[trump][c];
+                    Suit eff_card_suit = t.eff_suit_tbl[trump][c];
                     uint8_t power = 0;
 
                     if (eff_card_suit == trump) {
@@ -116,12 +118,29 @@ namespace euchre::tables {
         }
     }
 
+    static constexpr auto build_suit_mask(const EffSuitTable effective_suit_tbl) {
+        std::array<std::array<uint32_t, 4>, 4> suit_mask{}; // [trump][suit]
+
+        for (uint8_t t = 0; t < 4; ++t) {
+            for (uint8_t s = 0; s < 4; ++s) {
+                uint32_t m = 0;
+                for (uint8_t c = 0; c < 24; ++c) {
+                    if (effective_suit_tbl[t][c] == Suit{s}) {
+                        m |= (uint32_t{1} << c);
+                    }
+                }
+                suit_mask[t][s] = m;
+            }
+        }
+        return suit_mask;
+    }
 
     consteval Tables make_tables() {
         Tables t;
-        t.suit_table = make_suit_table();
-        t.eff_suit = make_eff_suit_table();
+        t.suit_tbl = make_suit_table();
+        t.eff_suit_tbl = make_eff_suit_table();
         t.deck = (1 << euchre::constants::num_cards) - 1;
+        t.suit_mask_tbl = build_suit_mask(t.eff_suit_tbl);
         make_power_table(t);
 
         return t;

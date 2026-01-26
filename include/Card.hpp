@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Defns.hpp"
 #include <cstdint>
 #include <array>
@@ -30,7 +31,9 @@ struct Card {
     uint8_t v = euchre::constants::invalid_card;
 
     constexpr Card() = default;
-    constexpr Card(uint8_t c) : v(c) {};
+    constexpr Card(uint8_t c) : v(c) {
+        assert(c < euchre::constants::num_cards);
+    };
     constexpr Card(uint32_t c) : v(static_cast<uint8_t>(c)) {
         assert(c < euchre::constants::num_cards);    
     }

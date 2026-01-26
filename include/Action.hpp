@@ -6,6 +6,7 @@
 
 namespace euchre::action {
 
+    using ActionMask = uint64_t;
     
     struct ActionId {
         uint16_t v;

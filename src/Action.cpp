@@ -2,6 +2,12 @@
 
 namespace euchre::action {
 
+/**
+ * @brief Decode an action that a bot can take.
+ * 
+ * @param action The action to take
+ * @return DecodedAction 
+ */
 DecodedAction decode_action(ActionId action) {
         uint16_t a = action.v;
 

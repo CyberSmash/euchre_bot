@@ -7,14 +7,14 @@ TEST_CASE("Effective Suit", "[tables]") {
 
     Card c = make_card(Suit::S, Rank::RJ);
 
-    Suit eff_s = t.eff_suit[trump][c];
+    Suit eff_s = t.eff_suit_tbl[trump][c];
     REQUIRE(eff_s == trump);
 
     REQUIRE_FALSE(eff_s == Suit::S);
    
     
     c = make_card(Suit::S, Rank::RK);
-    eff_s = t.eff_suit[trump][c];
+    eff_s = t.eff_suit_tbl[trump][c];
     REQUIRE_FALSE(eff_s == trump);
     REQUIRE(eff_s == Suit::S);
 

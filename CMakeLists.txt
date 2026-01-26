@@ -51,6 +51,7 @@ if (BUILD_TESTING)
     tests/test_cards.cpp
     tests/test_tables.cpp
     tests/test_deck.cpp
+    tests/test_hand.cpp
   )
   target_link_libraries(tests PRIVATE euchre_lib Catch2::Catch2WithMain)
 
