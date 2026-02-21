@@ -26,12 +26,18 @@ struct Hand {
         h |= (1u << c.v);
     }
 
+    constexpr void remove_card(Card c) {
+        assert(c.v < 24);
+        assert(hand_has(c));
+        h &= ~(1u << c.v);
+    }
+
     constexpr void give_card(Suit s, Rank r) {
         give_card({s, r});
     }
 
     uint32_t get_valid_hand(Card led, Suit trump) const {
-        euchre::tables::Tables tables = euchre::tables::tables();
+        const auto& tables = euchre::tables::tables();
 
         Suit effective_led_suit = tables.eff_suit_tbl[trump][led];
         uint32_t follow = h & tables.suit_mask_tbl[trump][effective_led_suit];
@@ -62,6 +68,9 @@ struct Hand {
 
     constexpr int num_cards(Hand hand) {
         return std::popcount(hand.h);
+    }
+    constexpr int num_cards() {
+        return std::popcount(h);
     }
 };
 

@@ -32,12 +32,13 @@ namespace euchre::tables {
         for (uint8_t tr = 0; tr < 4; tr++) {
             Suit trump = Suit(tr);
             for (uint32_t c = 0; c < 24; c++) {
-                if (is_left_bower(c, trump)) {
+                Card card = static_cast<Card>(c);
+                if (card.is_left_bower(trump)) {
                     t[trump][c] = trump;
                     continue;
                 }
 
-                t[trump][c] = get_suit(c);
+                t[trump][c] = card.get_suit();
 
             }
         }
@@ -47,14 +48,14 @@ namespace euchre::tables {
 
     constexpr uint8_t get_trump_power(Card c, Suit trump) {
         uint8_t power = 0;
-        if (is_right_bower(c, trump)) {
+        if (c.is_right_bower(trump)) {
             power = 200;
         }
-        else if (is_left_bower(c, trump)) {
+        else if (c.is_left_bower(trump)) {
             power = 199;
         }
         else {
-            Rank rank = get_rank(c);
+            Rank rank = c.get_rank();
             switch(rank) {
                 case Rank::RA:
                     power = 198;
@@ -104,11 +105,11 @@ namespace euchre::tables {
                     }
 
                     else if (eff_card_suit == led_suit) {
-                        Rank r = get_rank(c);
+                        Rank r = c.get_rank();
                         power = static_cast<uint8_t>(100 + base_rank_power(r));
                     }
                     else {
-                        Rank r = get_rank(c);
+                        Rank r = c.get_rank();
                         power = static_cast<uint8_t>(base_rank_power(r));
                     }
 

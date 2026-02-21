@@ -3,6 +3,7 @@ project(euchre LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB_RECURSE EUCHRE_SRC CONFIGURE_DEPENDS
      ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
@@ -52,6 +53,11 @@ if (BUILD_TESTING)
     tests/test_tables.cpp
     tests/test_deck.cpp
     tests/test_hand.cpp
+    tests/test_env.cpp
+    tests/test_action.cpp
+    tests/test_game.cpp
+    tests/test_heuristic.cpp
+    tests/test_minmax.cpp
   )
   target_link_libraries(tests PRIVATE euchre_lib Catch2::Catch2WithMain)
 

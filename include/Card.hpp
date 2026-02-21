@@ -12,7 +12,8 @@ enum Suit : uint8_t {
     C=0,
     H,
     S,
-    D
+    D,
+    None,
 };
 
 
@@ -32,10 +33,10 @@ struct Card {
 
     constexpr Card() = default;
     constexpr Card(uint8_t c) : v(c) {
-        assert(c < euchre::constants::num_cards);
+        
     };
     constexpr Card(uint32_t c) : v(static_cast<uint8_t>(c)) {
-        assert(c < euchre::constants::num_cards);    
+  
     }
     constexpr Card(int32_t c) : v(static_cast<uint8_t>(c)) {
         assert(c < euchre::constants::num_cards);
@@ -49,6 +50,36 @@ struct Card {
         return v;
     }
 
+    constexpr Suit same_color(Suit s) const {
+        switch(s) {
+            case Suit::C:
+                return Suit::S;
+            case Suit::S:
+                return Suit::C;
+            case Suit::H:
+                return Suit::D;
+            case Suit::D:
+                return Suit::H;
+            case Suit::None:
+                throw std::logic_error("Cannot get the same color suit of None");
+        };
+    }
+
+    constexpr Suit get_suit() const {
+        return static_cast<Suit>(v / 6);
+    }
+
+    constexpr Rank get_rank() const {
+        return static_cast<Rank>(v % 6);
+    }
+
+    constexpr bool is_left_bower(Suit trump) const {
+        return (get_rank() == Rank::RJ && get_suit() == same_color(trump));
+    }
+
+    constexpr bool is_right_bower(Suit trump) const {
+        return (get_rank() == Rank::RJ && get_suit() == trump);
+    }
     ~Card() = default;
 
 };
@@ -80,13 +111,6 @@ constexpr Card make_card(const Suit s, const Rank r) {
     return Card{s, r};
 }
 
-constexpr Suit get_suit(Card c) {
-    return static_cast<Suit>(c / 6);
-}
-
-constexpr Rank get_rank(Card c) {
-    return static_cast<Rank>(c % 6);
-}
 
 #define SHOW_SUIT_SYMBOL 1
 #ifdef SHOW_SUIT_FULL
@@ -119,27 +143,10 @@ inline std::ostream& operator<<(std::ostream& os, const Card& c) {
 }
 #else
 inline std::ostream& operator<<(std::ostream& os, const Card& c) {
-    return os << get_rank(c) << get_suit(c);
+    return os << c.get_rank() << c.get_suit();
 }
 #endif
 
-constexpr Suit same_color(Suit s) {
-    switch(s) {
-        case Suit::C:
-            return Suit::S;
-        case Suit::S:
-            return Suit::C;
-        case Suit::H:
-            return Suit::D;
-        case Suit::D:
-            return Suit::H;
-    };
-}
 
-constexpr bool is_left_bower(Card c, Suit trump) {
-    return (get_rank(c) == Rank::RJ && get_suit(c) == same_color(trump));
-}
 
-constexpr bool is_right_bower(Card c, Suit trump) {
-    return (get_rank(c) == Rank::RJ && get_suit(c) == trump);
-}
+

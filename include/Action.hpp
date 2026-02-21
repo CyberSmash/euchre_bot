@@ -8,6 +8,8 @@ namespace euchre::action {
 
     using ActionMask = uint64_t;
     
+
+
     struct ActionId {
         uint16_t v;
         constexpr ActionId() : v(0) {};
@@ -15,6 +17,16 @@ namespace euchre::action {
         constexpr operator uint16_t() const { return v; }
 
     };
+
+    constexpr ActionMask a2m(ActionId action) {
+        return (1ULL << action.v);
+    }
+
+    template <typename... Args>
+        requires(std::same_as<Args, ActionId> && ...)
+    constexpr ActionMask make_mask(Args... actions) {
+        return (a2m(actions) | ...);
+    }
 
     static inline constexpr uint16_t num_actions = 56;
     static inline constexpr ActionId PlayCardBase {0}; // 0 - 23

@@ -1,29 +1,21 @@
 #include "IBot.hpp"
-#include "Tables.hpp"
 #include <random>
-#include "Hand.hpp"
 class RandomBot : public IBot {
 
-    virtual void on_new_match([[maybe_unused]] uint32_t seed) override {
-        eng.seed(seed);
-    };
-
-    virtual ActionId select_action(const Observation& obs, ActionId action, ActionMask action_mask) override {
-
-        Hand valid_hand = 0;
-        if (obs.trick_cards == 0) {
-            // We are leading and can play whatever.
-            valid_hand = obs.hand;
-        }
-        else {
-            valid_hand = obs.hand.get_valid_hand(obs.lead, obs.trump);
-        }
-
-    }
-
+    public:
+    
+        RandomBot(std::string name) : IBot(std::move(name)) {}
+    virtual void on_new_match([[maybe_unused]] uint32_t seed) override;
+    ActionId select_action(const Observation& obs, [[maybe_unused]]ActionMask action_mask) override;
 
     protected:
 
-    std::mt19937 eng;
+    virtual ActionId bid_phase_1_action(const Observation& obs, [[maybe_unused]] ActionMask action_mask) override;
+    virtual ActionId bid_phase_2_action(const Observation& obs, [[maybe_unused]] ActionMask action_mask) override;
+    virtual ActionId go_alone_action(const Observation& obs, [[maybe_unused]] ActionMask action_mask) override;
+    virtual ActionId dealer_pickup_discard_action(const Observation& obs, [[maybe_unused]] ActionMask action_mask) override;
+    virtual ActionId play_trick(const Observation& obs, [[maybe_unused]] ActionMask action_mask) override;
+    
+    std::mt19937 rng;
 };
 

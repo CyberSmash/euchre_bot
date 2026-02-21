@@ -16,7 +16,7 @@ DecodedAction decode_action(ActionId action) {
             return {
                 .kind = ActionKind::PlayCard,
                 .card = c,
-                .suit = get_suit(c)
+                .suit = c.get_suit(),
             };
         }
         else if (is_discard(action)) {
@@ -25,14 +25,14 @@ DecodedAction decode_action(ActionId action) {
             return {
                 .kind = ActionKind::DiscardCard,
                 .card = c,
-                .suit = get_suit(c),
+                .suit = c.get_suit(),
             };
         }
         else if (is_call_trump(action)) {
             return {
                 .kind = ActionKind::CallTrump,
                 .card = euchre::constants::invalid_card,
-                .suit = Suit(a - static_cast<uint16_t>(ActionKind::CallTrump))
+                .suit = Suit(a - static_cast<uint16_t>(CallTrumpBase.v))
             };
         }
         else if (action == OrderUp ) {

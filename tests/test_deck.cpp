@@ -8,27 +8,27 @@ TEST_CASE("Deal Cards", "[deck]") {
     GameState gs;
     std::mt19937 eng(12345);
     std::array<Card, 10> a;
-    gs.deck = euchre::constants::deck_reset;
+    gs.hand_state.deck = euchre::constants::deck_reset;
     for (std::size_t i = 0; i < 10; i++) {
-        Card c = draw_card(gs.deck, eng);
+        Card c = draw_card(gs.hand_state.deck, eng);
         a[i] = c;
         REQUIRE_FALSE(a[i] == euchre::constants::invalid_card);
     }
 
-    gs.deck = euchre::constants::deck_reset;
+    gs.hand_state.deck = euchre::constants::deck_reset;
     eng.seed(12345);
     for (std::size_t i = 0; i < 10; i++) {
-        Card c = draw_card(gs.deck, eng); 
+        Card c = draw_card(gs.hand_state.deck, eng); 
         REQUIRE(c == a[i]);
     }
 
     // Test that a different seed gives different results.
     eng.seed(12346);
     int matches = 0;
-    gs.deck = euchre::constants::deck_reset;
+    gs.hand_state.deck = euchre::constants::deck_reset;
 
     for (size_t i = 0; i < 10; i++) {
-        Card c = draw_card(gs.deck, eng);
+        Card c = draw_card(gs.hand_state.deck, eng);
         if (c == a[i]) {
             matches++;
         }
@@ -42,10 +42,8 @@ TEST_CASE("Deal No Duplicates", "[deck]") {
     GameState gs;
     std::mt19937 eng(12345);
 
-    uint32_t hand = 0;
-
     for (int i = 0; i < euchre::constants::num_cards; i++) {
-        Card c = draw_card(gs.deck, eng);
+        Card c = draw_card(gs.hand_state.deck, eng);
         gs.hand_state.give_card_to(c, i % euchre::constants::num_players);
     }
     uint32_t sum = 0;
